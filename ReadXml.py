@@ -1,7 +1,9 @@
 import xml.etree.ElementTree as ET
 import os
 
-all_data=os.listdir('/Users/admin/Desktop/datas')
+
+directory = '/Users/admin/Desktop/datas/'
+all_data=os.listdir(directory)
 
 audio_folders = []
 for n in all_data:
@@ -15,8 +17,8 @@ for n in all_data:
 
 
 def setfiles(self, index):
-    self.audio = os.listdir('/Users/admin/Desktop/datas/' + audio_folders[index])
-    self.speech = '/Users/admin/Desktop/datas/' + speech_files[index]
+    self.audio = os.listdir(directory + audio_folders[index])
+    self.speech = directory + speech_files[index]
     
 def setcalls(self, speech_file):
     tree=ET.parse(speech_file)
@@ -49,34 +51,31 @@ def allwords(hypothesis):
     return words
 
 trial=Trial()
+
+
+def setcall(self, index):
+        self.words = allwords(trial.hyps[index])
+        self.confidence = trial.hyps[index].attrib['confidence']
+        self.time = trial.utters[index].attrib['start']
+        self.audio = trial.audio[index]
+        
 class CallOut:
     def __init__(self):
-        self.words=allwords(trial.hyps[0])
-        self.confidence=trial.hyps[0].attrib['confidence']
-        self.time=trial.utters[0].attrib['start']
         self.index = 0
-
+        setcall(self, self.index)
+        
     def nextcall(self):
         if self.index == len(trial.hyps) -1 :
             trial.nexttrial()
             self.__init__()
         else:
             self.index += 1
-            self.words = allwords(trial.hyps[self.index])
-            self.confidence = trial.hyps[self.index].attrib['confidence']
-            self.time = trial.utters[self.index].attrib['start']
-        
+            setcall(self, self.index)
+            
     def lastcall(self):
         if self.index == 0:
             trial.lasttrial()
             self.__init__()
         else:
             self.index -= 1
-            self.words = allwords(trial.hyps[self.index])
-            self.confidence = trial.hyps[self.index].attrib['confidence']
-            self.time = trial.utters[self.index].attrib['start']
-        
-    def disp(self):
-        print self.words
-        print "Time Stamp:", self.time
-        print "Confidence:", self.confidence
+            setcall(self, self.index)
