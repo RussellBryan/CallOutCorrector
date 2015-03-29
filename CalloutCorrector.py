@@ -2,22 +2,24 @@ from Tkinter import *
 import os
 
 from ReadXml import *
-
+from pygame import mixer
 
 current_call = CallOut()
 
 def gonext(event):
-    CallOut.nextcall(current_call)
+    current_call.nextcall()
     display_call.delete(0, END)
     display_call.insert(0, current_call.words)
+    playcall()
 
 def goback():
-    CallOut.lastcall(current_call)
+    current_call.lastcall()
     display_call.delete(0, END)
     display_call.insert(0, current_call.words)
+    playcall()
 
 def playcall():
-    pass
+    mixer.Sound(directory + audio_folders[trial.index] + '/' + current_call.audio).play()
 
 
 root = Tk()
@@ -37,5 +39,6 @@ back.grid(row=2, column=0)
 replay=Button(root, text="Replay", command=playcall)
 replay.grid(row=2, column=2)
 
+mixer.init(frequency=15000)
 
 root.mainloop()
