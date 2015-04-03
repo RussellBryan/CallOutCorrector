@@ -3,6 +3,7 @@ import os
 
 
 directory = '/Users/admin/Desktop/datas/'
+subject = '3021'
 all_data=os.listdir(directory)
 
 audio_folders = []
@@ -25,6 +26,7 @@ def setcalls(self, speech_file):
     root=tree.getroot()
     self.utters=root.findall("./turn/user_input/")
     self.hyps=root.findall("./turn/user_input/utterance/")
+    self.time = root[0].attrib['start']
 
 
 class Trial():
