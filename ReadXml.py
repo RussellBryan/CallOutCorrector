@@ -2,8 +2,8 @@ import xml.etree.ElementTree as ET
 import os
 
 
-directory = '/Users/admin/Desktop/datas/'
-subject = '3021'
+directory = '/Users/admin/Desktop/Subject33/Experiment/audio/'
+subject = '33'
 all_data=os.listdir(directory)
 
 audio_folders = []
