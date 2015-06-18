@@ -2,6 +2,8 @@ import xml.etree.ElementTree as ET
 import os
 import re
 
+from Config import *
+
 
 def natural_sort(l):
     convert = lambda text: int(text) if text.isdigit() else text.lower()
@@ -10,8 +12,8 @@ def natural_sort(l):
 
 
 def setfiles(self, index):
-    self.audio = os.listdir(directory + audio_folders[index])
-    self.speech = directory + speech_files[index]
+    self.audio = os.listdir( os.path.join(directory, audio_folders[index]) )
+    self.speech = os.path.join(directory, speech_files[index])
 
 
 def setcalls(self, speech_file):
@@ -76,7 +78,7 @@ class CallOut:
             setcall(self, self.index)
 
 
-directory = '/Users/karasinski/code/ModeExpDataAnalysis/Subjects/Completed/Subject33/Experiment/audio/'
+directory = os.path.join(root_directory, 'Subject' + str(subjectId), 'Experiment', 'audio')
 all_data = os.listdir(directory)
 
 audio_folders = []

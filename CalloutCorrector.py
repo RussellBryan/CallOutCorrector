@@ -1,10 +1,12 @@
 from Tkinter import *
 import os
 
+from Config import *
 from ReadXml import *
+from text2int import *
+
 from pygame import mixer
 from pandas import DataFrame
-from text2int import *
 
 
 def callid(call):
@@ -33,8 +35,7 @@ def gonext(event):
     current_call.nextcall()
     display_call.delete(0, END)
     display_call.insert(0, current_call.words)
-    disp_trial.delete(0, END)
-    disp_trial.insert(0, trial.index)
+    trial_disp_str.set(trial.index + 1)
     playcall()
 
 
@@ -47,8 +48,9 @@ def goback():
 
 
 def playcall():
-    mixer.Sound(directory + audio_folders[trial.index] + '/' + current_call.audio).play()
-
+    audio_filename = os.path.join(directory, audio_folders[trial.index], current_call.audio)
+    display_filename.set(current_call.audio)
+    mixer.Sound(audio_filename).play()
 
 data = 0
 current_call = CallOut()
@@ -57,24 +59,30 @@ callout_ids = ['450 ft', '400 ft', '350 ft', '7 %', '300 ft', '250 ft', '225 ft'
 
 root = Tk()
 frame = Frame(root, height=500, width=900)
-root.bind("<Return>", gonext)
+root.bind('<Return>', gonext)
 
-prompt = Label(root, text="Did they say:")
-prompt.grid(row=0, column=0)
+Label(root, text='Trial:').grid(row=0, column=0)
+trial_disp_str = StringVar()
+trial_disp_str.set(trial.index + 1)
+Label(root, textvariable=trial_disp_str).grid(row=0, column=1)
 
-display_call = Entry(root)
-display_call.grid(row=0, column=2)
-display_call.insert(0, current_call.words)
 
-disp_trial = Entry(root)
-disp_trial.grid(row=0, column=3)
-disp_trial.insert(0, trial.index)
+Label(root, text='Did they say:').grid(row=1, column=0)
 
-back = Button(root, text="Back", command=goback)
-back.grid(row=2, column=0)
+display_call = Entry(root, width=25)
+display_call.grid(row=1, column=1)
+display_call.insert(1, current_call.words)
 
-replay = Button(root, text="Replay", command=playcall)
-replay.grid(row=2, column=2)
+Label(root, text='File:').grid(row=2, column=0)
+display_filename = StringVar()
+display_filename.set('')
+Label(root, textvariable=display_filename).grid(row=2, column=1)
+
+back = Button(root, text='Back', command=goback)
+back.grid(row=3, column=0)
+
+replay = Button(root, text='Replay', command=playcall)
+replay.grid(row=3, column=1)
 
 mixer.init(frequency=15000)
 
@@ -85,4 +93,5 @@ DF = DataFrame(data)
 cols = [['Subject ID', 'Trial ID', 'Windows Timestamp', 'Simulation Timestamp', 'Hypothesis', 'Hypothesis Callout', 'Hypothesis CalloutID',
          'Transcribed Utterance', 'Transcribed Callout', 'Transcribed Callout ID', 'Confidence', 'ASR Scoring Time']]
 DF.columns = cols
-DF.to_csv('data_output.csv', index=False)
+outFilename = 'dataOutput-Subject' + str(subjectId) + '.csv'
+DF.to_csv(outFilename, index=False)
