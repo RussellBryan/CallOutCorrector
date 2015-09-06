@@ -15,7 +15,7 @@ ReadXml.py: Used to extract relevant data from ASR output XML files. Data is org
 Files Used for Analysis:
 
 CsvGen2.py: Similar to ReadXml.py. Used to generate csv file of relevant data from all subjects. 
-  directory is a string variable that defines the path to the folder containing all ASR output for all subjects
+  directory is a string variable that defines the path to the folder containing all ASR output for all subjects/n
     this folder should contain a folder for each subject labeled "Subject[#]"
       each subject folders should contain a folder named "Experiment" with in this folder there should be folders of audio files       that corespond to ASR output XML files such that a path to a particular audio file should have the form,
       directory + 'Subject30/Experiment/audio/audio-subject_30_trial_1_12-12-2014_14_04_30'
